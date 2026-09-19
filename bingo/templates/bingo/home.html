@@ -6,6 +6,39 @@
 </head>
 <body>
     <h1>🎰 Bingo Web</h1>
-    <p>Fase 1 completa: el proyecto Django y la app "bingo" están funcionando.</p>
+
+    <h2>Número actual:</h2>
+    {% if ultimo_numero %}
+        <p style="font-size: 60px; font-weight: bold;">{{ ultimo_numero }}</p>
+    {% else %}
+        <p>Todavía no se sorteó ningún número.</p>
+    {% endif %}
+
+    <p>Sorteados: {{ cantidad_sorteados }} / 90</p>
+
+    {% if terminado %}
+        <p><strong>¡Se sortearon los 90 números!</strong></p>
+    {% endif %}
+
+    <form action="{% url 'sortear' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" {% if terminado %}disabled{% endif %}>🎱 Sortear número</button>
+    </form>
+
+    <form action="{% url 'reiniciar' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">🔄 Reiniciar</button>
+    </form>
+
+    <h2>Historial (del más reciente al más viejo):</h2>
+    {% if historial %}
+        <ul>
+            {% for numero in historial %}
+                <li>{{ numero }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Sin números sorteados todavía.</p>
+    {% endif %}
 </body>
 </html>
